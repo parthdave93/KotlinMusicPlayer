@@ -16,10 +16,12 @@ import java.util.*
  * Created by sotsys014 on 3/3/16.
  */
 class SongsListAdapter(val context: Context) : RecyclerView.Adapter<SongsListAdapter.ViewHolder>() {
+    var showList: ArrayList<Song>? = null
     var SongList: ArrayList<Song>? = null
 
+
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.bindView(SongList?.get(position) as Song)
+        holder?.bindView(context, showList?.get(position) as Song)
     }
 
 
@@ -28,22 +30,31 @@ class SongsListAdapter(val context: Context) : RecyclerView.Adapter<SongsListAda
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = SongList?.size ?: 0
+    override fun getItemCount(): Int = showList?.size ?: 0
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-        fun bindView(song: Song) {
-            if (song.fileThumb != null) {
-                itemView.ivSongTilePic.setImageBitmap(BitmapFactory.decodeByteArray(song.fileThumb, 0, (song.fileThumb as ByteArray).size))
+        fun bindView(context: Context, song: Song) {
+            if (song.album_art!=null) {
+                itemView.ivSongTilePic.setImageBitmap(BitmapFactory.decodeFile(song.album_art))
                 itemView.ivSongTilePic.scaleType = ImageView.ScaleType.CENTER_CROP
             } else {
                 itemView.ivSongTilePic.scaleType = ImageView.ScaleType.CENTER
             }
-            itemView.tvSongName.text = song.songName
-            itemView.tvSongSubName.text = song.songSub
-            if (song.songSub != null)
-                itemView.tvSongSubName.visibility = if (song.songSub!!.length.equals(0)) View.GONE else View.VISIBLE
+            itemView.tvSongName.text = song.album
+            itemView.tvSongSubName.text = song.artist
+            if (song.artist != null)
+                itemView.tvSongSubName.visibility = if (song.artist!!.length.equals(0)) View.GONE else View.VISIBLE
+        }
+    }
+
+
+    fun filter(searchString: String) {
+        for (i in 0..showList?.size!!.minus(1)) {
+            if (!showList?.get(i)?.artist?.contains(searchString)!! || !showList?.get(i)?.album?.contains(searchString)!!) {
+                showList?.removeAt(i)
+                notifyDataSetChanged()
+            }
         }
     }
 }
