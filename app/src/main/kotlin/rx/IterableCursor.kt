@@ -1,9 +1,5 @@
 package com.demo.kotlindemo.rx
 
-/**
- * Created by sotsys014 on 5/3/16.
- */
-
 import android.database.Cursor;
 
 class IterableCursor(private val cursor: Cursor) : Iterable<Cursor> {

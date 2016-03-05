@@ -1,4 +1,4 @@
-package com.demo.kotlindemo
+package com.demo.kotlindemo.ui.activity
 
 import android.content.Context
 import android.database.Cursor
@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
+import com.demo.kotlindemo.R
 import com.demo.kotlindemo.adapters.SongsListAdapter
 import com.demo.kotlindemo.models.Song
 import com.demo.kotlindemo.models.filterSongs

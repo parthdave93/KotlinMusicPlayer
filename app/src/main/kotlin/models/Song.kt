@@ -5,15 +5,10 @@ import com.demo.kotlindemo.adapters.SongsListAdapter
 import com.orm.SugarRecord
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-/**
- * Created by sotsys014 on 3/3/16.
- */
-
-
+//open for public class
 open class Song : SugarRecord() {
     var id: String? = null
     var title: String? = null
@@ -27,10 +22,10 @@ open class Song : SugarRecord() {
     var numsongs: String? = null
     var album_id: String? = null
     var albumThumb: Boolean = true
-
-
 }
 
+
+//to compare song object from list of song object and if it finds d object then return true
 inline fun ArrayList<Song>.compare(song: Song): Boolean {
     for (i in 0..this.size.minus(1)) {
         if (song.Compare(this.get(i)))
@@ -39,24 +34,20 @@ inline fun ArrayList<Song>.compare(song: Song): Boolean {
     return false
 }
 
+//to compare song object with another song object
 inline fun Song.Compare(song: Song) = (id == song.id && album == song.album && artist == song.artist)
 
-fun filterSongs(adapter: SongsListAdapter?, searchString: String) {
-    adapter?.showList?.clear()
-    adapter?.notifyDataSetChanged()
+
+//to filter songs from adapter
+inline fun filterSongs(adapter: SongsListAdapter?, searchString: String) {
     Log.d("searchString", "" + searchString)
     if (searchString.length > 0) {
         //    adapter?.showList = adapter?.SongList
-        Observable.from(adapter?.SongList).filter {
-            Log.d("Song", "" + it.album)
-            Log.d("searchString", "" + searchString)
-            (it?.album?.contains(searchString)!! || it?.artist?.contains(searchString)!!)
-        }.observeOn(Schedulers.newThread()).doOnNext {
-            adapter?.showList?.add(it)
-            adapter?.notifyDataSetChanged()
+        Observable.just(searchString).doOnNext {
+            adapter?.itemFilter?.filter(searchString)
         }.observeOn(AndroidSchedulers.mainThread()).debounce(6, TimeUnit.SECONDS).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
     } else {
-        adapter?.showList = adapter?.SongList
+        adapter?.SongList = adapter?.showList
         adapter?.notifyDataSetChanged()
     }
 }
