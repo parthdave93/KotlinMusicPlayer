@@ -9,12 +9,9 @@ import android.support.v7.widget.SearchView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
 import android.view.Menu
-import android.view.View
-import android.widget.AdapterView
 import com.demo.kotlindemo.R
 import com.demo.kotlindemo.adapters.SongsListAdapter
 import com.demo.kotlindemo.models.Song
-import com.demo.kotlindemo.models.filterSongs
 import com.demo.kotlindemo.rx.IterableCursor
 import com.demo.kotlindemo.utils.FileFinder
 import com.orm.SugarRecord
@@ -24,7 +21,7 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.util.*
 
-class MainActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
+open class MainActivity : AppCompatActivity() {
 
 
     var TAG = "MainActivity"
@@ -83,9 +80,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
         }.observeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 
-    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-
-    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         var menuInflator = menuInflater
@@ -107,7 +101,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
             }
 
             override fun onQueryTextChange(query: String): Boolean {
-                filterSongs(mAdapter, query)
+                mAdapter?.itemFilter?.filter(query)
                 return false
             }
         })

@@ -25,7 +25,8 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 tools:src="@drawable/ic_headphones"
-                android:scaleType="center"/>
+                android:scaleType="center"
+                android:transitionName="@string/transition_songPic"/>
 
         </FrameLayout>
 
@@ -34,7 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            tools:text="Song Name" />
+            tools:text="Song Name"
+            android:transitionName="@string/transition_songName"/>
 
         <TextView
             android:id="@+id/tvSongSubName"
@@ -42,6 +44,14 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             tools:text="SongSub Name" />
+
+        <TextView
+            android:id="@+id/tvTags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Song Tag"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

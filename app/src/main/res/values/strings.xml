@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">KotlinDemo</string>
+    <string name="transition_songPic">trans_songpic</string>
+    <string name="transition_songName">transition_song_name</string>
+    <string name="transition_songSub">transition_song_sub</string>
 </resources>

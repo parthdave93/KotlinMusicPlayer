@@ -1,15 +1,12 @@
 package com.demo.kotlindemo.models
 
-import android.util.Log
-import com.demo.kotlindemo.adapters.SongsListAdapter
 import com.orm.SugarRecord
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
+import java.io.Serializable
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 //open for public class
-open class Song : SugarRecord() {
+open class Song : SugarRecord() , Serializable {
+
     var id: String? = null
     var title: String? = null
     var album: String? = null
@@ -22,6 +19,8 @@ open class Song : SugarRecord() {
     var numsongs: String? = null
     var album_id: String? = null
     var albumThumb: Boolean = true
+    var tags:String = ""
+
 }
 
 
@@ -36,18 +35,3 @@ inline fun ArrayList<Song>.compare(song: Song): Boolean {
 
 //to compare song object with another song object
 inline fun Song.Compare(song: Song) = (id == song.id && album == song.album && artist == song.artist)
-
-
-//to filter songs from adapter
-inline fun filterSongs(adapter: SongsListAdapter?, searchString: String) {
-    Log.d("searchString", "" + searchString)
-    if (searchString.length > 0) {
-        //    adapter?.showList = adapter?.SongList
-        Observable.just(searchString).doOnNext {
-            adapter?.itemFilter?.filter(searchString)
-        }.observeOn(AndroidSchedulers.mainThread()).debounce(6, TimeUnit.SECONDS).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
-    } else {
-        adapter?.SongList = adapter?.showList
-        adapter?.notifyDataSetChanged()
-    }
-}
