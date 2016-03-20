@@ -13,6 +13,7 @@ import android.widget.Filter
 import android.widget.ImageView
 import com.demo.kotlindemo.R
 import com.demo.kotlindemo.models.Song
+import com.demo.kotlindemo.models.filter
 import kotlinx.android.synthetic.main.item_songtile.view.*
 import startActivityWithBundle
 import ui.activity.PlayerActivity
@@ -22,6 +23,7 @@ open class SongsListAdapter(public val context: Context) : RecyclerView.Adapter<
     var showList: ArrayList<Song>? = null
     var SongList: ArrayList<Song>? = null
     var itemFilter: ItemFilter = ItemFilter()
+    var filteredText: String = ""
 
 
     //binding the views data
@@ -74,26 +76,43 @@ open class SongsListAdapter(public val context: Context) : RecyclerView.Adapter<
         }
     }
 
-    public inner class ItemFilter : Filter() {
+    open inner class ItemFilter : Filter() {
 
         override fun performFiltering(constraint: CharSequence?): FilterResults? {
             var filterString = constraint.toString().toLowerCase()
             var results = FilterResults()
             var filteredList = ArrayList<Song>()
-            if (showList != null)
-                for (i in 0..(showList as ArrayList<Song>).size.minus(1)) {
-                    if (showList?.get(i)?.album?.contains(filterString, true)!! || showList?.get(i)?.artist?.contains(filterString, true)!! || showList?.get(i)?.tags?.contains(filterString, true)!!)
-                        filteredList.add((showList as ArrayList<Song>).get(i))
-                }
+            //if it's not filtered then we have to find string from all list
+            if (!filterString.isEmpty() && !filterString.contains(filteredText)) {
+                if (showList != null)
+                    for (i in 0..(showList as ArrayList<Song>).size.minus(1)) {
+                        if (showList?.get(i)!!.filter(filterString))
+                            filteredList.add((showList as ArrayList<Song>).get(i))
+                    }
+            } else if (filterString.isEmpty()) {
+                filteredList.addAll(SongList!!)
+            }
+            //if it's already filtered then y bother to find from all list character sequence will be continued so just find from what we are shawing
+            else {
+
+                if (SongList != null)
+                    for (i in 0..(SongList as ArrayList<Song>).size.minus(1)) {
+                        if (SongList?.get(i)!!.filter(filterString))
+                            filteredList.add((SongList as ArrayList<Song>).get(i))
+                    }
+            }
 
             results.values = filteredList
             results.count = filteredList?.size
+
+
             return results
         }
 
         override fun publishResults(CharSequence: CharSequence?, filterResults: FilterResults?) {
             SongList = filterResults?.values as ArrayList<Song>?
             notifyDataSetChanged()
+            filteredText = "" + CharSequence
         }
     }
 }

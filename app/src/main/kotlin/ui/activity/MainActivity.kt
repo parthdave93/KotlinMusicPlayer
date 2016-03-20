@@ -14,7 +14,6 @@ import com.demo.kotlindemo.adapters.SongsListAdapter
 import com.demo.kotlindemo.models.Song
 import com.demo.kotlindemo.rx.IterableCursor
 import com.demo.kotlindemo.utils.FileFinder
-import com.orm.SugarRecord
 import kotlinx.android.synthetic.main.activity_main.*
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -25,7 +24,7 @@ open class MainActivity : AppCompatActivity() {
 
 
     var TAG = "MainActivity"
-    var songsList: ArrayList<Song>? = null
+    var songsList: ArrayList<Song>? = ArrayList()
     var mAdapter: SongsListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +43,8 @@ open class MainActivity : AppCompatActivity() {
     }
 
     fun mp3FromDb() {
-        songsList = SugarRecord.listAll(Song::class.java) as (ArrayList<Song>)
+
+//        songsList = SugarRecord.listAll(Song::class.java) as (ArrayList<Song>)
         mAdapter?.SongList = songsList
         mAdapter?.showList = songsList
         mAdapter?.notifyDataSetChanged()
@@ -70,14 +70,13 @@ open class MainActivity : AppCompatActivity() {
             song.minyear = cursor?.getString(8)
             Log.d(TAG, "directory:" + song.artist)
             song
-        }.observeOn(Schedulers.newThread()).doOnNext { song ->
+        }.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).doOnNext { song ->
             //what this will do is add songs one by one in arraylist
-
             if (song != null) {
                 songsList?.add(song)
                 mAdapter?.notifyDataSetChanged()
             }
-        }.observeOn(AndroidSchedulers.mainThread()).subscribe()
+        }.observeOn(AndroidSchedulers.mainThread()).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
     }
 
 

@@ -20,14 +20,10 @@ open class PlayerActivity : AppCompatActivity() {
     var currentSongPosition:Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-//            var changeTransform = TransitionInflater.from(this).inflateTransition(R.transition.songplayer)
-//            var explodeTransform = TransitionInflater.from(this).inflateTransition(android.R.transition.explode)
-
+            //            var changeTransform = TransitionInflater.from(this).inflateTransition(R.transition.songplayer)
+            //            var explodeTransform = TransitionInflater.from(this).inflateTransition(android.R.transition.explode)
 
             // inside your activity (if you did not enable transitions in your theme)
             getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
@@ -36,9 +32,12 @@ open class PlayerActivity : AppCompatActivity() {
             // set an exit transition
             getWindow().setExitTransition(Explode());
             // set an enter transition
-//            getWindow().setEnterTransition(changeTransform);
-//            getWindow().setExitTransition(explodeTransform);
+            //            getWindow().setEnterTransition(changeTransform);
+            //            getWindow().setExitTransition(explodeTransform);
         }
+
+        super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_player)
 
         var extras = intent.extras

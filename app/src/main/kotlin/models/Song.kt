@@ -5,7 +5,7 @@ import java.io.Serializable
 import java.util.*
 
 //open for public class
-open class Song : SugarRecord() , Serializable {
+open class Song : SugarRecord(), Serializable {
 
     var id: String? = null
     var title: String? = null
@@ -19,9 +19,12 @@ open class Song : SugarRecord() , Serializable {
     var numsongs: String? = null
     var album_id: String? = null
     var albumThumb: Boolean = true
-    var tags:String = ""
+    var tags: String = ""
 
 }
+
+inline fun Song.filter(filterString: String): Boolean =
+        this.album?.contains(filterString, true)!! || this.artist?.contains(filterString, true)!! || this.tags?.contains(filterString, true)!!
 
 
 //to compare song object from list of song object and if it finds d object then return true
